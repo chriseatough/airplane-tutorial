@@ -25,7 +25,7 @@
         //adding the airplane
         _plane = [SKSpriteNode spriteNodeWithImageNamed:@"PLANE 8 N.png"];
         _plane.scale = 0.6;
-        _plane.zPosition = 2;
+        _plane.zPosition = [self getRandomNumberBetween:1 to:2];
         _plane.position = CGPointMake(screenWidth/2, 15+_plane.size.height/2);
         [self addChild:_plane];
         
@@ -38,7 +38,7 @@
         //adding airplane shadow
         _planeShadow = [SKSpriteNode spriteNodeWithImageNamed:@"PLANE 8 SHADOW.png"];
         _planeShadow.scale = 0.6;
-        _planeShadow.zPosition = 1;
+        _planeShadow.zPosition = _plane.zPosition - 1;
         _planeShadow.position = CGPointMake(screenWidth/2+15, 0+_planeShadow.size.height/2);
         [self addChild:_planeShadow];
         
@@ -126,7 +126,7 @@
         enemy.scale = 0.6;
         
         enemy.position = CGPointMake(screenRect.size.width/2, screenRect.size.height/2);
-        enemy.zPosition = 1;
+        enemy.zPosition = [self getRandomNumberBetween:0 to:1];
         
         
         CGMutablePathRef cgpath = CGPathCreateMutable();
@@ -172,10 +172,10 @@
             SKSpriteNode *cloud = [SKSpriteNode spriteNodeWithTexture:[_cloudsTextures objectAtIndex:whichCloud]];
             int randomYAxix = [self getRandomNumberBetween:0 to:screenRect.size.height];
             cloud.position = CGPointMake(screenRect.size.height+cloud.size.height/2, randomYAxix);
-            cloud.zPosition = 1;
+            cloud.zPosition = [self getRandomNumberBetween:0 to:1];
             int randomTimeCloud = [self getRandomNumberBetween:9 to:19];
             
-            SKAction *move =[SKAction moveTo:CGPointMake(0-cloud.size.height, randomYAxix) duration:randomTimeCloud];
+            SKAction *move =[SKAction moveTo:CGPointMake(0-cloud.size.height, randomYAxix-(screenRect.size.height/2)) duration:randomTimeCloud];
             SKAction *remove = [SKAction removeFromParent];
             [cloud runAction:[SKAction sequence:@[move,remove]]];
             [self addChild:cloud];
