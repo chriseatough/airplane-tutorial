@@ -170,12 +170,19 @@
             
             int whichCloud = [self getRandomNumberBetween:0 to:3];
             SKSpriteNode *cloud = [SKSpriteNode spriteNodeWithTexture:[_cloudsTextures objectAtIndex:whichCloud]];
-            int randomYAxix = [self getRandomNumberBetween:0 to:screenRect.size.height];
-            cloud.position = CGPointMake(screenRect.size.height+cloud.size.height/2, randomYAxix);
-            cloud.zPosition = [self getRandomNumberBetween:0 to:1];
-            int randomTimeCloud = [self getRandomNumberBetween:9 to:19];
             
-            SKAction *move =[SKAction moveTo:CGPointMake(0-cloud.size.height, randomYAxix-(screenRect.size.height/2)) duration:randomTimeCloud];
+            // setting the starting position of the cloud
+            int startingX = [self getRandomNumberBetween:0 to:screenRect.size.width];
+            int startingY = screenRect.size.height + cloud.size.height;
+            cloud.position = CGPointMake(startingX, startingY);
+            cloud.zPosition = [self getRandomNumberBetween:0 to:1];
+
+            // setting the ending position of the cloud, and the duration it takes to arrive there
+            int randomTimeCloud = [self getRandomNumberBetween:9 to:19];
+            int endingX = startingX;
+            int endingY = 0 - cloud.size.height;
+
+            SKAction *move =[SKAction moveTo:CGPointMake(endingX, endingY) duration:randomTimeCloud];
             SKAction *remove = [SKAction removeFromParent];
             [cloud runAction:[SKAction sequence:@[move,remove]]];
             [self addChild:cloud];
