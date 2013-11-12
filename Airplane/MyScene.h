@@ -11,6 +11,7 @@
 
 static const uint8_t bulletCategory = 1;
 static const uint8_t enemyCategory = 2;
+static const uint8_t playerCategory = 3;
 
 @interface MyScene : SKScene<UIAccelerometerDelegate, SKPhysicsContactDelegate>
 {
@@ -20,6 +21,7 @@ static const uint8_t enemyCategory = 2;
     double currentMaxAccelX;
     double currentMaxAccelY;
     int score;
+    int lives;
 }
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
@@ -30,5 +32,6 @@ static const uint8_t enemyCategory = 2;
 @property NSMutableArray *explosionTextures;
 @property NSMutableArray *cloudsTextures;
 @property SKLabelNode *scoreNode;
+@property SKLabelNode *livesNode;
 
 @end

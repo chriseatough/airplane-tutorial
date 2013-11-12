@@ -29,6 +29,12 @@
         _plane.position = CGPointMake(screenWidth/2, 15+_plane.size.height/2);
         [self addChild:_plane];
         
+        // adding a physics body
+        _plane.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:_plane.size];
+        _plane.physicsBody.dynamic = YES;
+        _plane.physicsBody.categoryBitMask = playerCategory;
+        _plane.physicsBody.contactTestBitMask = enemyCategory;
+        _plane.physicsBody.collisionBitMask = 0;
         
         //adding the background
         SKSpriteNode *background = [SKSpriteNode spriteNodeWithImageNamed:@"airPlanesBackground"];
@@ -110,6 +116,14 @@
         _scoreNode.fontSize = 20;
         _scoreNode.position = CGPointMake(10, 0);
         [self addChild:_scoreNode];
+
+        // adding a label that has the players lives
+        lives = 3;
+        _livesNode = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
+        _livesNode.text = [NSString stringWithFormat:@"%d", lives];
+        _livesNode.fontSize = 20;
+        _livesNode.position = CGPointMake(screenWidth - 20, 0);
+        [self addChild:_livesNode];
         
     }
     return self;
@@ -314,7 +328,7 @@
         secondBody = contact.bodyA;
     }
     
-    if ((firstBody.categoryBitMask & bulletCategory) != 0)
+    if (firstBody.categoryBitMask == bulletCategory && secondBody.categoryBitMask == enemyCategory)
     {
         
         SKNode *projectile = (contact.bodyA.categoryBitMask & bulletCategory) ? contact.bodyA.node : contact.bodyB.node;
@@ -330,12 +344,41 @@
         explosion.zPosition = 1;
         explosion.scale = 0.6;
         explosion.position = contact.bodyA.node.position;
-        
         [self addChild:explosion];
         
         SKAction *explosionAction = [SKAction animateWithTextures:_explosionTextures timePerFrame:0.07];
         SKAction *remove = [SKAction removeFromParent];
         [explosion runAction:[SKAction sequence:@[explosionAction,remove]]];
+        
+    }
+
+    // if there is a collision between the player and an enemy plane
+    if ((firstBody.categoryBitMask == playerCategory && secondBody.categoryBitMask == enemyCategory)
+        || (firstBody.categoryBitMask == enemyCategory && secondBody.categoryBitMask == playerCategory)){
+
+        SKNode *enemy = (contact.bodyB.categoryBitMask & enemyCategory) ? contact.bodyB.node : contact.bodyA.node;
+        [enemy runAction:[SKAction removeFromParent]];
+
+        if (lives == 0) {
+            [_plane runAction:[SKAction removeFromParent]];
+            [_planeShadow runAction:[SKAction removeFromParent]];
+            [_propeller runAction:[SKAction removeFromParent]];
+            [_smokeTrail runAction:[SKAction removeFromParent]];
+        }
+
+        //add explosion
+        SKSpriteNode *explosion = [SKSpriteNode spriteNodeWithTexture:[_explosionTextures objectAtIndex:0]];
+        explosion.zPosition = 1;
+        explosion.scale = 0.6;
+        explosion.position = contact.bodyA.node.position;
+        [self addChild:explosion];
+
+        SKAction *explosionAction = [SKAction animateWithTextures:_explosionTextures timePerFrame:0.07];
+        SKAction *remove = [SKAction removeFromParent];
+        [explosion runAction:[SKAction sequence:@[explosionAction,remove]]];
+
+        lives--;
+        _livesNode.text = [NSString stringWithFormat:@"%d", lives];
         
     }
     
