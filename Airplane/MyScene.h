@@ -19,6 +19,7 @@ static const uint8_t enemyCategory = 2;
     CGFloat screenWidth;
     double currentMaxAccelX;
     double currentMaxAccelY;
+    int score;
 }
 
 @property (strong, nonatomic) CMMotionManager *motionManager;
@@ -28,5 +29,6 @@ static const uint8_t enemyCategory = 2;
 @property SKEmitterNode *smokeTrail;
 @property NSMutableArray *explosionTextures;
 @property NSMutableArray *cloudsTextures;
+@property SKLabelNode *scoreNode;
 
 @end

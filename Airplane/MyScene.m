@@ -104,6 +104,13 @@
             [_cloudsTextures addObject:texture];
         }
         
+        // adding a label that has the players score
+        _scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
+        _scoreNode.text = [NSString stringWithFormat:@"%d", score];
+        _scoreNode.fontSize = 20;
+        _scoreNode.position = CGPointMake(10, 0);
+        [self addChild:_scoreNode];
+        
     }
     return self;
 }
@@ -314,6 +321,9 @@
         SKNode *enemy = (contact.bodyA.categoryBitMask & bulletCategory) ? contact.bodyB.node : contact.bodyA.node;
         [projectile runAction:[SKAction removeFromParent]];
         [enemy runAction:[SKAction removeFromParent]];
+        
+        score++;
+        _scoreNode.text = [NSString stringWithFormat:@"%d", score];
         
         //add explosion
         SKSpriteNode *explosion = [SKSpriteNode spriteNodeWithTexture:[_explosionTextures objectAtIndex:0]];
