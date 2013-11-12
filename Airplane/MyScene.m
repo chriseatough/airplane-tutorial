@@ -104,6 +104,13 @@
             [_cloudsTextures addObject:texture];
         }
         
+        // adding a label that has the players score
+        SKLabelNode *scoreNode = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
+        scoreNode.text = @"0";
+        scoreNode.fontSize = 20;
+        scoreNode.position = CGPointMake(0, 0);
+        [self addChild:scoreNode];
+        
     }
     return self;
 }
