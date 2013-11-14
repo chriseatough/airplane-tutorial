@@ -358,12 +358,24 @@
 
         SKNode *enemy = (contact.bodyB.categoryBitMask & enemyCategory) ? contact.bodyB.node : contact.bodyA.node;
         [enemy runAction:[SKAction removeFromParent]];
+        
+        // http://www.youtube.com/watch?v=IJtaYgN-_dw - pulse red when a collision occurs
+        SKAction *pulseRed = [SKAction sequence:@[
+                                                  [SKAction colorizeWithColor:[SKColor redColor] colorBlendFactor:1.0 duration:0.2],
+                                                  [SKAction colorizeWithColorBlendFactor:0.0 duration:0.2]
+                                                  ]];
+        [_plane runAction:pulseRed];
 
         if (lives == 0) {
             [_plane runAction:[SKAction removeFromParent]];
             [_planeShadow runAction:[SKAction removeFromParent]];
             [_propeller runAction:[SKAction removeFromParent]];
             [_smokeTrail runAction:[SKAction removeFromParent]];
+            
+            // http://www.youtube.com/watch?v=IJtaYgN-_dw - transition to a new scene (this one, again)
+            SKScene *nextScene = [[MyScene alloc] initWithSize:self.size];
+            SKTransition *doors = [SKTransition doorsCloseVerticalWithDuration:0.5];
+            [self.view presentScene:nextScene transition:doors];
         }
 
         //add explosion
